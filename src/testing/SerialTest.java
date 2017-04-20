@@ -81,7 +81,7 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			//System.err.println(e.toString());
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 				String inputLine=input.readLine();
 				System.out.println(inputLine);
 			} catch (Exception e) {
-				System.err.println(e.toString());
+				//System.err.println(e.toString());
 			}
 		}
 		// Ignore all the other eventTypes, but you should consider the other ones.
@@ -114,9 +114,9 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 	public synchronized void turnOnOff(String data){
         try{
             output.write(data.getBytes()); //Envía los datos por medio del Serial
-            System.out.println(data.getBytes());
+            //System.out.println(data.getBytes());
         } catch(Exception e){
-            System.err.println(e.toString());
+           // System.err.println(e.toString());
         }
      }
 	
@@ -126,24 +126,24 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 	public SerialTest() {
 		super();
 		this.setPreferredSize(new Dimension(200,100));
-		this.on = new JButton("Encender");
-		this.off = new JButton("Apagar");
+		this.on = new JButton("Registrado");
+		this.off = new JButton("No Registrado");
 		this.add(this.on);
 		this.add(this.off);
-		this.off.setEnabled(false);
+		//this.off.setEnabled(false);
 		this.on.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SerialTest.this.off.setEnabled(true);
-				SerialTest.this.on.setEnabled(false);
+				//SerialTest.this.off.setEnabled(true);
+				//SerialTest.this.on.setEnabled(false);
 				//Envía 1 para encender
 				SerialTest.this.turnOnOff("1");
 			}});
 		this.off.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SerialTest.this.off.setEnabled(false);
-				SerialTest.this.on.setEnabled(true);
+				//SerialTest.this.off.setEnabled(false);
+				//SerialTest.this.on.setEnabled(true);
 				//Envía 0 para apagar
 				SerialTest.this.turnOnOff("0");
 			}});
