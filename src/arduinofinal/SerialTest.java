@@ -1,9 +1,8 @@
-package testing;
+package arduinofinal;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -12,14 +11,31 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import java.util.Enumeration;
+import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.util.Scanner;
+import java.util.Set;
+import java.io.FileReader;
+import java.io.FileWriter;
+//import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 
 
 public class SerialTest extends JPanel implements SerialPortEventListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 199050153260062318L;
 	SerialPort serialPort;
 	/** The port we're normally going to use. */
+	HashMap<String, String[]> tabla = new HashMap<String, String[]>(30); 
+	private String inputLine="";
+	
+		
 	private static final String PORT_NAMES[] = {
 		"/dev/tty.usbserial-A9007UX1", // Mac OS X
 		"/dev/ttyACM0", // Raspberry Pi
@@ -102,8 +118,9 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 	public synchronized void serialEvent(SerialPortEvent oEvent) {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
-				String inputLine=input.readLine();
-				System.out.println(inputLine);
+				this.inputLine=input.readLine();
+				this.asistenciaHash();
+				//System.out.println(inputLine);
 			} catch (Exception e) {
 				//System.err.println(e.toString());
 			}
@@ -121,42 +138,101 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
      }
 	
 	//Atributos para botones
-    private JButton on, off;
+    private JButton save;
 	
 	public SerialTest() {
 		super();
 		this.setPreferredSize(new Dimension(200,100));
-		this.on = new JButton("Registrado");
-		this.off = new JButton("No Registrado");
-		this.add(this.on);
-		this.add(this.off);
-		//this.off.setEnabled(false);
-		this.on.addActionListener(new ActionListener() {
+		this.save = new JButton("Guardar");
+		this.add(this.save);
+		this.save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//SerialTest.this.off.setEnabled(true);
-				//SerialTest.this.on.setEnabled(false);
-				//Envía 1 para encender
-				SerialTest.this.turnOnOff("1");
+				try {
+					SerialTest.this.hashtodoc();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}});
-		this.off.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//SerialTest.this.off.setEnabled(false);
-				//SerialTest.this.on.setEnabled(true);
-				//Envía 0 para apagar
-				SerialTest.this.turnOnOff("0");
-			}});
+		
 		}
+	
+	private void doctohash() throws IOException{
+		FileReader file = new FileReader("D:/ferpa/workspace/DataStructuresFinalProject/src/arduinofinal/lista.txt");
+		BufferedReader br = new BufferedReader(file);
+		Scanner in = new Scanner(br);
+		in.nextLine();
+		in.nextLine();
+		in.nextLine();
+		in.nextLine();
+		while (in.hasNextLine()){
+			String key=in.nextLine();
+			String name=in.nextLine();
+			String flag=in.nextLine();
+			String value[]={name,flag};
+			tabla.put(key, value);
+		}
+		in.close();
+	}
+	
+	private void hashtodoc() throws IOException{
+		FileWriter file = new FileWriter("D:/ferpa/workspace/DataStructuresFinalProject/src/arduinofinal/lista.txt");
+		BufferedWriter bw = new BufferedWriter(file);
+		Set<String> keylist = tabla.keySet();
+		Object[] keyliststr = keylist.toArray();
+		bw.write("Lista de alumnos organizada por:");
+		bw.newLine();
+		bw.write("1. Llave RFID");
+		bw.newLine();
+		bw.write("2. Nombre Alumno");
+		bw.newLine();
+		bw.write("3. Asistencia");
+		bw.newLine();
+		for(int i=0; i<tabla.size(); i++){
+			String usedkey = (String) keyliststr[i];
+			bw.write(usedkey);
+			bw.newLine();
+			bw.write(tabla.get(usedkey)[0]);
+			bw.newLine();
+			bw.write(tabla.get(usedkey)[1]);
+			bw.newLine();
+			
+		}
+		bw.close();
+	}
+	
+	private void asistenciaHash(){
+		if (tabla.containsKey(inputLine)){
+			String[] tempStore= tabla.remove(inputLine);
+			tempStore[1]="1";
+			tabla.put(inputLine, tempStore);
+			try {
+				output.write("1".getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		else {
+			try {
+				output.write("0".getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public static void main(String[] args) throws Exception {
 		 SerialTest main = new SerialTest();
          main.initialize();
+         main.doctohash();
          JFrame jf = new JFrame();
          jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          jf.add(main);
          jf.pack();
          jf.setVisible(true);
-         System.out.println("Started");
+         //System.out.println("Started");
 	}
 }

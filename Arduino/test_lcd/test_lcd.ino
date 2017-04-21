@@ -20,9 +20,17 @@ void setup() {
   //Serial.println("Lectura del UID");
   // Inicializar el LCD con el número de  columnas y filas del LCD
   lcd.begin(16, 2);
-  // Escribimos el Mensaje en el LCD.
-  //lcd.print("Veamos anime");
-  
+  digitalWrite(2,HIGH);
+  delay(100);
+  digitalWrite(2,LOW);
+  delay(100);
+  digitalWrite(2,HIGH);
+  delay(100);
+  digitalWrite(2,LOW);
+  delay(100);
+  digitalWrite(2,HIGH);
+  delay(100);
+  digitalWrite(2,LOW);
 }
 
 void loop() {
@@ -84,34 +92,4 @@ void loop() {
   //lcd.print(displayKey(key));
   //delay(2000);
 }
-
-/*String displayKey(byte key[]){
-  String hexa="";
-  String save="";
-  for (int i = 0; i<4; i++){
-    if (i>0){
-      save+=" ";
-      hexa= String(key[i], HEX);
-      save+=hexa;
-    }
-    else{
-      hexa= String(key[i], HEX);
-      save+=hexa;  
-    }
-  }
-  return save;
-}*/
-
-/*String addZero(String element){
-  
-  int intelement= (element.toInt());
-  String zero="0";
-  if (intelement<10 && intelement>0){
-    zero+=element;
-    return zero;
-  }
-  else{
-    return element;
-  }
-}*/
 
