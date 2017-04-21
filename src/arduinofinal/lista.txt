@@ -2,11 +2,8 @@ Lista de alumnos organizada por:
 1. Llave RFID
 2. Nombre Alumno
 3. Asistencia
-D8B83CEF
-Lorene Moran
-0
 35B0046D
-Alejandro Delgado
+Lorene Moran
 0
 4ABC0A1D
 Darryl Haynes
@@ -85,6 +82,9 @@ Sheila Jensen
 0
 9F515A1F
 Katie Stone
+0
+A5EE5ECB
+Alejandro Delgado
 0
 5BA88EEB
 Horace Grant

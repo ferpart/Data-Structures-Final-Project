@@ -1,6 +1,9 @@
 package arduinofinal;
 
+//import java.awt.Component;
 import java.awt.Dimension;
+//import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,11 +15,17 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import java.util.Enumeration;
 import java.util.HashMap;
+
+//import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import java.util.Scanner;
 import java.util.Set;
+//import java.util.concurrent.TimeUnit;
 import java.io.FileReader;
 import java.io.FileWriter;
 //import java.io.BufferedReader;
@@ -34,6 +43,7 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 	/** The port we're normally going to use. */
 	HashMap<String, String[]> tabla = new HashMap<String, String[]>(30); 
 	private String inputLine="";
+	private String actualName="";
 	
 		
 	private static final String PORT_NAMES[] = {
@@ -120,7 +130,7 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 			try {
 				this.inputLine=input.readLine();
 				this.asistenciaHash();
-				//System.out.println(inputLine);
+				System.out.println(inputLine);
 			} catch (Exception e) {
 				//System.err.println(e.toString());
 			}
@@ -136,26 +146,6 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
            // System.err.println(e.toString());
         }
      }
-	
-	//Atributos para botones
-    private JButton save;
-	
-	public SerialTest() {
-		super();
-		this.setPreferredSize(new Dimension(200,100));
-		this.save = new JButton("Guardar");
-		this.add(this.save);
-		this.save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					SerialTest.this.hashtodoc();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}});
-		
-		}
 	
 	private void doctohash() throws IOException{
 		FileReader file = new FileReader("D:/ferpa/workspace/DataStructuresFinalProject/src/arduinofinal/lista.txt");
@@ -204,6 +194,9 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 	private void asistenciaHash(){
 		if (tabla.containsKey(inputLine)){
 			String[] tempStore= tabla.remove(inputLine);
+			this.actualName=tempStore[0];
+			System.out.println(actualName);
+			this.name.setText("Nombre: " + actualName);
 			tempStore[1]="1";
 			tabla.put(inputLine, tempStore);
 			try {
@@ -223,7 +216,53 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
 		}
 	}
 	
+	//Atributos para botones
+    private JButton save, saveAndExit;
+    private JLabel name;
+    
+    /*private synchronized Component guitest(){
+    	this.save= new JButton(actualName);
+    	return this.test;
+    	
+    }*/
 	
+	public SerialTest() {
+		super();
+		this.setLayout(new GridLayout (0,1));
+		this.setPreferredSize(new Dimension(200,100));
+		this.save = new JButton("Guardar");
+		this.saveAndExit = new JButton("Guardar y Salir");
+		this.name = new JLabel("Nombre:", SwingConstants.CENTER);
+		//this.actname=new JLabel("");
+		//this.name.setFont(new Font("Verdana",1,15));
+		this.add(this.name);
+		//this.add(this.actname);
+		this.add(this.save);
+		this.add(this.saveAndExit);
+		this.save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					SerialTest.this.hashtodoc();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}});
+		this.saveAndExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					SerialTest.this.hashtodoc();
+				} catch (IOException e) {
+					//e.printStackTrace();
+				}
+				System.exit(0);
+			}
+			
+		});
+	
+		}
+		
 	public static void main(String[] args) throws Exception {
 		 SerialTest main = new SerialTest();
          main.initialize();
@@ -231,6 +270,7 @@ public class SerialTest extends JPanel implements SerialPortEventListener{
          JFrame jf = new JFrame();
          jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
          jf.add(main);
+         //jf.add(main.guitest());
          jf.pack();
          jf.setVisible(true);
          //System.out.println("Started");
