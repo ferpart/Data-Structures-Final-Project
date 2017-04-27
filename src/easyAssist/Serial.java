@@ -1,4 +1,4 @@
-package arduinofinal;
+package easyAssist;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -140,13 +140,9 @@ public class Serial extends JPanel implements SerialPortEventListener{
      }
 	
 	private void doctohash() throws IOException{
-		FileReader file = new FileReader("D:/ferpa/workspace/DataStructuresFinalProject/src/arduinofinal/lista.txt");
+		FileReader file = new FileReader("D:/ferpa/workspace/DataStructuresFinalProject/src/easyAssist/lista.txt");
 		BufferedReader br = new BufferedReader(file);
 		Scanner in = new Scanner(br);
-		in.nextLine();
-		in.nextLine();
-		in.nextLine();
-		in.nextLine();
 		while (in.hasNextLine()){
 			String key=in.nextLine();
 			String name=in.nextLine();
@@ -155,7 +151,7 @@ public class Serial extends JPanel implements SerialPortEventListener{
 			 * Para marcar todas las banderas de asistencia como 0,
 			 * quitar las "//" de el comentario de abajo.
 			 */
-			//flag="0";
+			flag="0";
 			String value[]={name,flag};
 			tabla.put(key, value);
 		}
@@ -163,18 +159,10 @@ public class Serial extends JPanel implements SerialPortEventListener{
 	}
 	
 	private void hashtodoc() throws IOException{
-		FileWriter file = new FileWriter("D:/ferpa/workspace/DataStructuresFinalProject/src/arduinofinal/lista.txt");
+		FileWriter file = new FileWriter("D:/ferpa/workspace/DataStructuresFinalProject/src/easyAssist/lista.txt");
 		BufferedWriter bw = new BufferedWriter(file);
 		Set<String> keylist = tabla.keySet();
 		Object[] keyliststr = keylist.toArray();
-		bw.write("Lista de alumnos organizada por:");
-		bw.newLine();
-		bw.write("1. Llave RFID");
-		bw.newLine();
-		bw.write("2. Nombre Alumno");
-		bw.newLine();
-		bw.write("3. Asistencia");
-		bw.newLine();
 		for(int i=0; i<tabla.size(); i++){
 			String usedkey = (String) keyliststr[i];
 			bw.write(usedkey);

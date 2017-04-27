@@ -1,7 +1,3 @@
-Lista de alumnos organizada por:
-1. Llave RFID
-2. Nombre Alumno
-3. Asistencia
 35B0046D
 Lorene Moran
 0
