@@ -5,9 +5,6 @@ Lista de alumnos organizada por:
 35B0046D
 Lorene Moran
 0
-4ABC0A1D
-Darryl Haynes
-0
 1137C742
 Billy Logan
 0
@@ -22,6 +19,9 @@ Laura Bryan
 0
 F0C9393F
 Henrietta Brady
+0
+C5EF8ACB
+Hector Monter
 0
 ABF84133
 Elijah Rodriquez
