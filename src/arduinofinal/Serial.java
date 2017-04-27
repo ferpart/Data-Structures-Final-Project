@@ -16,10 +16,8 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-//import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import java.util.Scanner;
@@ -153,6 +151,11 @@ public class Serial extends JPanel implements SerialPortEventListener{
 			String key=in.nextLine();
 			String name=in.nextLine();
 			String flag=in.nextLine();
+			/**
+			 * Para marcar todas las banderas de asistencia como 0,
+			 * quitar las "//" de el comentario de abajo.
+			 */
+			//flag="0";
 			String value[]={name,flag};
 			tabla.put(key, value);
 		}
