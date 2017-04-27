@@ -16,9 +16,11 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import java.util.Scanner;
 import java.util.Set;
@@ -38,6 +40,7 @@ public class Serial extends JPanel implements SerialPortEventListener{
 	HashMap<String, String[]> tabla = new HashMap<String, String[]>(30); 
 	private String inputLine="";
 	private String actualName="";
+
 	
 		
 	private static final String PORT_NAMES[] = {
@@ -124,7 +127,7 @@ public class Serial extends JPanel implements SerialPortEventListener{
 			try {
 				this.inputLine=input.readLine();
 				this.asistenciaHash();
-				System.out.println(inputLine);
+				//System.out.println(inputLine);
 			} catch (Exception e) {
 				//System.err.println(e.toString());
 			}
@@ -186,37 +189,62 @@ public class Serial extends JPanel implements SerialPortEventListener{
 		if (tabla.containsKey(inputLine)){
 			String[] tempStore= tabla.remove(inputLine);
 			this.actualName=tempStore[0];
-			System.out.println(actualName);
+			//System.out.println(actualName);
 			this.name.setText("Nombre: " + actualName);
 			tempStore[1]="1";
 			tabla.put(inputLine, tempStore);
 			try {
 				output.write("1".getBytes());
+				Serial.this.anadirAlumno.setEnabled(false);
 			} catch (IOException e) {
 				//e.printStackTrace();
 			}
 		}
 		else {
 			try {
+				Serial.this.name.setHorizontalAlignment(JTextField.CENTER);
 				output.write("0".getBytes());
+				Serial.this.anadirAlumno.setEnabled(true);
+				Serial.this.name.setText("Escribir Nombre de nuevo Alumno");
+				Serial.this.name.selectAll();
 			} catch (IOException e) {
 				//e.printStackTrace();
 			}
 		}
 	}
 	
+	private void anadirHash(String name){
+		/**
+		 * Para cambiar si se quiere dar asistencia o no a un alumno al registrarlo,
+		 * cambiar las "//" de uno u otro "tempStore" con 0 es sin asistencia y con
+		 * 1 es con asistencia.
+		 */
+		String[] tempStore = {name, "0"};
+		//String[] tempStore = {name, "1"};
+		tabla.put(inputLine, tempStore);
+	}
+	
 	//Atributos para botones
-    private JButton save, saveAndExit;
-    private JLabel name;
+    private JButton save, saveAndExit, anadirAlumno;
+    //private JLabel name;
+    private JTextField name;
 	
 	public Serial() {
 		super();
 		this.setLayout(new GridLayout (0,1));
-		this.setPreferredSize(new Dimension(200,100));
+		this.setPreferredSize(new Dimension(800,200));
 		this.save = new JButton("Guardar");
 		this.saveAndExit = new JButton("Guardar y Salir");
-		this.name = new JLabel("Nombre:", SwingConstants.CENTER);
+		this.anadirAlumno = new JButton("Añadir Alumno");
+		this.name = new JTextField("Nombre: ");
 		this.add(this.name);
+		/**
+		 * La opcion para agregar alumnos desde la consola esta por 
+		 * default desactivada, para utilizar remover las "//" de la 
+		 * siguiente linea.
+		 */
+		this.add(this.anadirAlumno);
+		this.anadirAlumno.setEnabled(false);
 		this.add(this.save);
 		this.add(this.saveAndExit);
 		this.save.addActionListener(new ActionListener() {
@@ -240,18 +268,35 @@ public class Serial extends JPanel implements SerialPortEventListener{
 			}
 			
 		});
+		this.anadirAlumno.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				anadirHash(Serial.this.name.getText());
+				Serial.this.anadirAlumno.setEnabled(false);
+				Serial.this.name.setHorizontalAlignment(JTextField.LEFT);
+				Serial.this.name.setText("Nombre: ");
+				try {
+					output.write("2".getBytes());
+				} catch (IOException e1) {
+					//e1.printStackTrace();
+				}
+			}
+		});
 	
 		}
 		
 	public static void main(String[] args) throws Exception {
+		 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		 Serial main = new Serial();
          main.initialize();
          main.doctohash();
-         JFrame jf = new JFrame();
-         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-         jf.add(main);
-         jf.pack();
-         jf.setVisible(true);
+         JFrame mainFrame = new JFrame();
+         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         mainFrame.setTitle("Asistencia de Alumnos");
+         mainFrame.add(main);
+         mainFrame.pack();
+         mainFrame.setLocationRelativeTo(null);
+         mainFrame.setVisible(true);
          
 	}
 }
