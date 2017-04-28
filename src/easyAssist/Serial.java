@@ -5,30 +5,30 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Scanner;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-
-import java.util.Scanner;
-import java.util.Set;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
-
 
 public class Serial extends JPanel implements SerialPortEventListener{
 	
@@ -273,7 +273,7 @@ public class Serial extends JPanel implements SerialPortEventListener{
 	 * default desactivada, para utilizar cambiar
 	 * registroAlumno a "true".
 	 */
-	private Boolean registroAlumno = true;
+	private Boolean registroAlumno = false;
 	
 	/*
 	 * La opcion para automaticamente quitar todas las asistencias
@@ -379,7 +379,7 @@ public class Serial extends JPanel implements SerialPortEventListener{
 		main.doctohash();
         JFrame mainFrame = new JFrame();
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setTitle("Asistencia de Alumnos");
+        mainFrame.setTitle("Easy Assist");
         mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage("res/easyAssist.png"));
         mainFrame.add(main);
         mainFrame.pack();

@@ -4,6 +4,9 @@ Lorene Moran
 1137C742
 Billy Logan
 0
+246C97B6
+German Treviño
+0
 A45AE0A1
 Darrin Romero
 0
@@ -78,9 +81,6 @@ Sheila Jensen
 0
 9F515A1F
 Katie Stone
-0
-A5EE5ECB
-Alejandro Delgado
 0
 5BA88EEB
 Horace Grant
