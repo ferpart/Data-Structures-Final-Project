@@ -35,7 +35,10 @@ public class Serial extends JPanel implements SerialPortEventListener{
 	
 	private static final long serialVersionUID = 199050153260062318L;
 	SerialPort serialPort;
-	// El puerto que sera utilizado normalmente.
+	
+	/*
+	 *  El puerto que sera utilizado normalmente.
+	 */
 	HashMap<String, String[]> tabla = new HashMap<String, String[]>(30); 
 	
 	/*
@@ -44,19 +47,26 @@ public class Serial extends JPanel implements SerialPortEventListener{
 	private static final String PORT_NAMES[] = {
 		"COM6", // Windows
 	};
+	
 	/*
 	* El BufferedReader sera alimentado por un InputStreamReader
 	* convertiendo los bytes en caracteres
 	* asi mostrando los resultados independientemente.
 	*/
 	private BufferedReader input;
+	
 	/* El stream de salida para el puerto */
 	private OutputStream output;
-	/* Milisegundos para bloquear mientras 
+	
+	/* 
+	* Milisegundos para bloquear mientras 
 	* se espera a que el puerto se abra
 	*/
 	private static final int TIME_OUT = 2000;
-	/* Bits por default por segundo en el puerto COM */
+	
+	/* 
+	 * Bits por default por segundo en el puerto COM 
+	 */
 	private static final int DATA_RATE = 9600;
 	
 	public void initialize() {
@@ -64,7 +74,9 @@ public class Serial extends JPanel implements SerialPortEventListener{
 		CommPortIdentifier portId = null;
 		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 		
-		//Primero, encontrar una instancia del puerto serial como fue puesto en PORT_NAMES
+		/*
+		 * Primero, encontrar una instancia del puerto serial como fue puesto en PORT_NAMES
+		 */
 		while (portEnum.hasMoreElements()) {
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			for (String portName : PORT_NAMES) {
@@ -80,21 +92,30 @@ public class Serial extends JPanel implements SerialPortEventListener{
 		}
 	
 		try {
-			// abrir el puerto setial, y usar la clase name para appName.
+			
+			/*
+			 * Abrir el puerto serial, y usar la clase name para appName.
+			 */
 			serialPort = (SerialPort) portId.open(this.getClass().getName(),
 			TIME_OUT);
 			
-			// poner los parametros de los puertos
+			/*
+			 *  Poner los parametros de los puertos
+			 */
 			serialPort.setSerialPortParams(DATA_RATE,
 			SerialPort.DATABITS_8,
 			SerialPort.STOPBITS_1,
 			SerialPort.PARITY_NONE);
 			
-			// abrir los "streams"
+			/*
+			 *  Abrir los "streams"
+			 */
 			input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
 			output = serialPort.getOutputStream();
 			
-			// agregar listeners para los eventos
+			/*
+			 *  Agregar listeners para los eventos
+			 */
 			serialPort.addEventListener(this);
 			serialPort.notifyOnDataAvailable(true);
 		} catch (Exception e) {
